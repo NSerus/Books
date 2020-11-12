@@ -27,8 +27,8 @@ namespace Books
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<BooksDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BooksDbContext")));
+            services.AddDbContext<BooksDbContext>(options =>  //Scaffolding: adicionou isto
+                    options.UseSqlServer(Configuration.GetConnectionString("BooksConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
