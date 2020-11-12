@@ -34,7 +34,8 @@ namespace Books.Controllers
             }
 
             var author = await _context.Author
-                .FirstOrDefaultAsync(m => m.AuthorId == id);
+                .SingleOrDefaultAsync(m => m.AuthorId == id);
+
             if (author == null)
             {
                 return NotFound();
