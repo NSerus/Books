@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Books.Data;
 using Books.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Books.Controllers
 {
@@ -38,6 +39,8 @@ namespace Books.Controllers
 
             if (author == null)
             {
+
+                //todo: Maybe someone deletes it. Show appropriate message
                 return NotFound();
             }
 
@@ -59,8 +62,11 @@ namespace Books.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(author);
-                await _context.SaveChangesAsync();
+                //todo: aitional validations
+                _context.Add(author); 
+                await _context.SaveChangesAsync(); 
+
+                // todo: inform user that authr was successfully created
                 return RedirectToAction(nameof(Index));
             }
             return View(author);
@@ -77,6 +83,7 @@ namespace Books.Controllers
             var author = await _context.Author.FindAsync(id);
             if (author == null)
             {
+                //todo: maybe someone deleted it.Show appropiated message
                 return NotFound();
             }
             return View(author);
@@ -89,7 +96,7 @@ namespace Books.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AuthorId,Name")] Author author)
         {
-            if (id != author.AuthorId)
+            if (id != author.AuthorId) // verificar ID do author
             {
                 return NotFound();
             }
@@ -105,13 +112,19 @@ namespace Books.Controllers
                 {
                     if (!AuthorExists(author.AuthorId))
                     {
+
+                        //todo: maybe someone deleted it
+                        //Inform user and allow to insert new with same data
                         return NotFound();
                     }
                     else
                     {
+                        //todo: show error and allow to try again
                         throw;
                     }
                 }
+                // todo: inform user that authr was successfully created
+
                 return RedirectToAction(nameof(Index));
             }
             return View(author);
@@ -129,6 +142,8 @@ namespace Books.Controllers
                 .FirstOrDefaultAsync(m => m.AuthorId == id);
             if (author == null)
             {
+                //todo: maybe someone deleted it
+                //Inform user
                 return NotFound();
             }
 
@@ -141,6 +156,13 @@ namespace Books.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var author = await _context.Author.FindAsync(id);
+
+            if(author != null)
+            {
+                _context.Author.Remove(author);
+                await _context.SaveChangesAsync();
+            }
+            //todo: inform user that the author was successfully deleted
             _context.Author.Remove(author);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
