@@ -7,8 +7,10 @@ namespace Books.Models
 {
     public class Category
     {
-        public int CategoryID { get; set; }
+        public int CategoryId { get; set; }
 
         public string Name { get; set; }
+
+        public ICollection<BookCategory> CategoryBooks { get; set; }
     }
 }
